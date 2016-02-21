@@ -9,6 +9,7 @@ module Main where
 -- https://www.staff.science.uu.nl/~swier004/Publications/DataTypesALaCarte.pdf
 -- https://oleksandrmanzyuk.wordpress.com/2014/06/18/from-object-algebras-to-finally-tagless-interpreters-2/
 -- https://www.andres-loeh.de/OpenDatatypes.pdf
+-- http://wadler.blogspot.com/2008/02/data-types-la-carte.html
 
 -- We start with two shapes - square and circle - and one operation - area
 
