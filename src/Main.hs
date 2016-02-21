@@ -59,9 +59,9 @@ expressionProblem3 :: IO ()
 expressionProblem3 = do
   putStrLn "ExpressionProblem3"
   let shapes = [
-        EP3b.ShapeV2 $ EP3a.Square 10.0,
-        EP3b.ShapeV2 $ EP3a.Circle 10.0,
-        EP3b.ShapeV2 $ EP3b.Rectangle 10.0 20.0
+        EP3b.Shape $ EP3a.Square 10.0,
+        EP3b.Shape $ EP3a.Circle 10.0,
+        EP3b.Shape $ EP3b.Rectangle 10.0 20.0
         ]
   print $ map EP3a.area shapes
   print $ map EP3b.perimeter shapes
