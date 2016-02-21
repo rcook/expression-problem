@@ -1,6 +1,11 @@
-{-# LANGUAGE ExistentialQuantification #-}
-
 module Main where
+
+import qualified ExpressionProblem1a as EP1a
+import qualified ExpressionProblem1b as EP1b
+import qualified ExpressionProblem2a as EP2a
+import qualified ExpressionProblem2b as EP2b
+import qualified ExpressionProblem3a as EP3a
+import qualified ExpressionProblem3b as EP3b
 
 -- References
 -- http://c2.com/cgi/wiki?ExpressionProblem
@@ -11,37 +16,18 @@ module Main where
 -- https://www.andres-loeh.de/OpenDatatypes.pdf
 -- http://wadler.blogspot.com/2008/02/data-types-la-carte.html
 
--- We start with two shapes - square and circle - and one operation - area
-
 -- Expression problem (1)
 -- Using single ADT
 --
 -- Can add new functions: just create a new function, e.g. "perimeter"
 -- 
 -- Can't add new shapes: "Shape" ADT and existing functions are closed
-{-
-data Shape = Square Double | Circle Double
-           deriving Show
-
-area :: Shape -> Double
-area s =
-  case s of
-       Square side -> side * side
-       Circle radius -> pi * radius * radius
-
--- New operation
-perimeter :: Shape -> Double
-perimeter s =
-  case s of
-       Square side -> 4.0 * side
-       Circle radius -> 2 * pi * radius
-
-main :: IO ()
-main = do
-  let shapes = [Square 10.0, Circle 10.0]
-  print $ map area shapes
-  print $ map perimeter shapes
--}
+expressionProblem1 :: IO ()
+expressionProblem1 = do
+  putStrLn "ExpressionProblem1"
+  let shapes = [EP1a.Square 10.0, EP1a.Circle 10.0]
+  print $ map EP1a.area shapes
+  print $ map EP1b.perimeter shapes
 
 -- Expression problem (2)
 -- Using type classes and separate ADT for each shape
@@ -52,100 +38,36 @@ main = do
 -- Straightforward to add new shapes: declare a new ADT and implement existing
 -- type classes
 --
--- Problem: Heterogeneous lists of shapes no longer possible
-{-
-data Square = Square Double
-            deriving Show
-
-data Circle = Circle Double
-            deriving Show
-
-class Area s where
-  area :: s -> Double
-instance Area Square where
-  area (Square side) = side * side
-instance Area Circle where
-  area (Circle radius) = pi * radius * radius
-
--- New operation
-class Perimeter s where
-  perimeter :: s -> Double
-instance Perimeter Square where
-  perimeter (Square side) = 4.0 * side
-instance Perimeter Circle where
-  perimeter (Circle radius) = 2.0 * pi * radius
-
--- New shape
-data Rectangle = Rectangle Double Double
-               deriving Show
-
-instance Area Rectangle where
-  area (Rectangle width height) = width * height
-
-instance Perimeter Rectangle where
-  perimeter (Rectangle width height) = 2.0 * width + 2.0 * height
-
-main :: IO ()
-main = do
+-- Problem: Heterogeneous lists of shapes not possible
+expressionProblem2 :: IO ()
+expressionProblem2 = do
+  putStrLn "ExpressionProblem2"
   let
-    squares = [Square 10.0, Square 20.0]
-    circles = [Circle 10.0, Circle 20.0]
-    rectangles = [Rectangle 10.0 20.0, Rectangle 20.0 30.0]
-  print $ map area squares
-  print $ map perimeter squares
-  print $ map area circles
-  print $ map perimeter circles
-  print $ map area rectangles
-  print $ map perimeter rectangles
--}
+    squares = [EP2a.Square 10.0, EP2a.Square 20.0]
+    circles = [EP2a.Circle 10.0, EP2a.Circle 20.0]
+    rectangles = [EP2b.Rectangle 10.0 20.0, EP2b.Rectangle 20.0 30.0]
+  print $ map EP2a.area squares
+  print $ map EP2b.perimeter squares
+  print $ map EP2a.area circles
+  print $ map EP2b.perimeter circles
+  print $ map EP2a.area rectangles
+  print $ map EP2b.perimeter rectangles
 
--- Expression problem (3)
--- Existential quantification
-
-data Square = Square Double
-            deriving Show
-
-data Circle = Circle Double
-            deriving Show
-
-class Area s where
-  area :: s -> Double
-instance Area Square where
-  area (Square side) = side * side
-instance Area Circle where
-  area (Circle radius) = pi * radius * radius
-
-data Shape = forall a. Area a => Shape a
-instance Area Shape where
-  area (Shape s) = area s
-
--- New operation: introduce new version of Shape
-class Perimeter s where
-  perimeter :: s -> Double
-instance Perimeter Square where
-  perimeter (Square side) = 4.0 * side
-instance Perimeter Circle where
-  perimeter (Circle radius) = 2.0 * pi * radius
-data ShapeV2 = forall a. (Area a, Perimeter a) => ShapeV2 a
-instance Area ShapeV2 where
-  area (ShapeV2 s) = area s
-instance Perimeter ShapeV2 where
-  perimeter (ShapeV2 s) = perimeter s
-
--- New shape: introduce new ADT and instances, new version of Shape not required
-data Rectangle = Rectangle Double Double
-               deriving Show
-instance Area Rectangle where
-  area (Rectangle width height) = width * height
-instance Perimeter Rectangle where
-  perimeter (Rectangle width height) = 2.0 * width + 2.0 * height
+-- Expression problem (2)
+-- Use existential quantification to solve the previous problem
+expressionProblem3 :: IO ()
+expressionProblem3 = do
+  putStrLn "ExpressionProblem3"
+  let shapes = [
+        EP3b.ShapeV2 $ EP3a.Square 10.0,
+        EP3b.ShapeV2 $ EP3a.Circle 10.0,
+        EP3b.ShapeV2 $ EP3b.Rectangle 10.0 20.0
+        ]
+  print $ map EP3a.area shapes
+  print $ map EP3b.perimeter shapes
 
 main :: IO ()
-main = do
-  let shapes = [
-        ShapeV2 $ Square 10.0,
-        ShapeV2 $ Circle 10.0,
-        ShapeV2 $ Rectangle 10.0 20.0
-        ]
-  print $ map area shapes
-  print $ map perimeter shapes
+main =
+  expressionProblem1 >>
+  expressionProblem2 >>
+  expressionProblem3
