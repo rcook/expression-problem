@@ -5,8 +5,10 @@ module Main where
 -- References
 -- http://c2.com/cgi/wiki?ExpressionProblem
 -- http://koerbitz.me/posts/Solving-the-Expression-Problem-in-Haskell-and-Java.html
+-- http://koerbitz.me/posts/Sum-Types-Visitors-and-the-Expression-Problem.html
 -- https://www.staff.science.uu.nl/~swier004/Publications/DataTypesALaCarte.pdf
 -- https://oleksandrmanzyuk.wordpress.com/2014/06/18/from-object-algebras-to-finally-tagless-interpreters-2/
+-- https://www.andres-loeh.de/OpenDatatypes.pdf
 
 -- We start with two shapes - square and circle - and one operation - area
 
